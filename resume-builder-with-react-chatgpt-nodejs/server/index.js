@@ -5,7 +5,7 @@ const path = require("path");
 const cors = require("cors");
 const fs = require("fs");
 const app = express();
-const PORT = 4000;
+const PORT = 5001;
 
 app.use(express.urlencoded({ extended: true }));
 app.use("/api/uploads", express.static("uploads"));
@@ -62,7 +62,7 @@ app.post("/api/resume/create", upload.single("headshotImage"), async (req, res) 
 	const newEntry = {
 		id: generateID(),
 		fullName,
-		image_url: `https://resume.bugtech.solutions/uploads/${req.file.filename}`,
+		image_url: `https://resume.bugtech.solutions/api/uploads/${req.file.filename}`,
 		currentPosition,
 		currentLength,
 		currentTechnologies,
