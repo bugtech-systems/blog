@@ -8,7 +8,7 @@ const app = express();
 const PORT = 4000;
 
 app.use(express.urlencoded({ extended: true }));
-app.use("/uploads", express.static("uploads"));
+app.use("/api/uploads", express.static("uploads"));
 app.use(express.json());
 app.use(cors());
 
@@ -49,7 +49,7 @@ const ChatGPTFunction = async (text) => {
 	return response.data.choices[0].text;
 };
 
-app.post("/resume/create", upload.single("headshotImage"), async (req, res) => {
+app.post("/api/resume/create", upload.single("headshotImage"), async (req, res) => {
 	const {
 		fullName,
 		currentPosition,
@@ -62,7 +62,7 @@ app.post("/resume/create", upload.single("headshotImage"), async (req, res) => {
 	const newEntry = {
 		id: generateID(),
 		fullName,
-		image_url: `http://localhost:4000/uploads/${req.file.filename}`,
+		image_url: `https://resume.bugtech.solutions/uploads/${req.file.filename}`,
 		currentPosition,
 		currentLength,
 		currentTechnologies,
@@ -81,9 +81,8 @@ app.post("/resume/create", upload.single("headshotImage"), async (req, res) => {
 		return stringText;
 	};
 
-	const prompt3 = `I am writing a resume, my details are \n name: ${fullName} \n role: ${currentPosition} (${currentLength} years). \n During my years I worked at ${
-		workArray.length
-	} companies. ${remainderText()} \n Can you write me 50 words for each company seperated in numbers of my succession in the company (in first person)?`;
+	const prompt3 = `I am writing a resume, my details are \n name: ${fullName} \n role: ${currentPosition} (${currentLength} years). \n During my years I worked at ${workArray.length
+		} companies. ${remainderText()} \n Can you write me 50 words for each company seperated in numbers of my succession in the company (in first person)?`;
 
 	const objective = await ChatGPTFunction(prompt1);
 	const keypoints = await ChatGPTFunction(prompt2);
