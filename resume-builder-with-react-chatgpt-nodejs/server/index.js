@@ -6,9 +6,13 @@ const cors = require("cors");
 const fs = require("fs");
 const app = express();
 const PORT = 5001;
+const dotenv = require('dotenv');
+
+dotenv.config()
+
 
 app.use(express.urlencoded({ extended: true }));
-app.use("/api/uploads", express.static("uploads"));
+app.use("/api/uploads", express.static(path.join(__dirname, "uploads")));
 app.use(express.json());
 app.use(cors());
 
@@ -16,7 +20,7 @@ const generateID = () => Math.random().toString(36).substring(2, 10);
 
 const storage = multer.diskStorage({
 	destination: (req, file, cb) => {
-		cb(null, "uploads");
+		cb(null, path.join(__dirname, "uploads"));
 	},
 	filename: (req, file, cb) => {
 		cb(null, Date.now() + path.extname(file.originalname));
